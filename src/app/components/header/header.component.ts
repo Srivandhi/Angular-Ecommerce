@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
+import { Component,inject } from '@angular/core';
 import { PrimaryButtonComponent } from "../primary-button/primary-button.component";
+import { CartService } from '../../services/cart.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [PrimaryButtonComponent],
+  imports: [PrimaryButtonComponent,RouterLink],
   template:`
   <div class="bg-pink-100 px-4 py-3 shadow-md flex justify-between items-center">
-    <span class="text-xl" >My Store</span>
-    <app-primary-button label = "Cart" (btnClicked)="showbtnclick()"/>
+    <button class="text-xl cursor-pointer" routerLink="/" >My Store</button>
+    <app-primary-button [label] = " 'Cart (' +cartservice.cart().length+ ')' " 
+    routerLink = "/cart"
+    />
   </div>
   `,
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  showbtnclick(){
-    console.log("button clicked");
-  }
+    cartservice =inject(CartService)  
 }

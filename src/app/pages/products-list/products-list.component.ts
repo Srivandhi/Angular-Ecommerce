@@ -1,15 +1,29 @@
 import { Component, signal } from '@angular/core';
-import { product } from '../../../../models/products.model';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { Product } from '../../../../models/products.model';
+
 
 @Component({
   selector: 'app-products-list',
-  imports: [],
-  templateUrl: './products-list.component.html',
+  imports: [ProductCardComponent],
+  template: `
+    <div class="p-8 grid grid-cols-2 gap-4">
+      @for (product of products(); track product.id) {
+       <app-product-card  [product]="product"/>
+      }
+    </div>
+  `,
   styleUrl: './products-list.component.css'
 })
 export class ProductsListComponent {
-    products = signal<product[]>([
-      {
+
+    async ngOnInit(){
+      const res = await fetch('https://fakestoreapi.com/products/category/electronics');
+      const data = await res.json();
+      this.products.set(data);
+    }
+    products = signal<Product[]>([
+     /*  {
         id: 1,
         title: 'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
         price: 109.95,
@@ -38,6 +52,6 @@ export class ProductsListComponent {
         price: 15.99,
         image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
         stock: 7,
-      },
+      }, */
     ]);
 }
